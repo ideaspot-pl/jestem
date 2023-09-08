@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[Route('/api/v1', name: 'app_public_api_')]
 class PublicApiController extends AbstractController
@@ -58,9 +59,16 @@ class PublicApiController extends AbstractController
         #[MapRequestPayload] Attendee $attendee,
         Event $event,
         AttendeeRepository $attendeeRepository,
+        ValidatorInterface $validator,
     ): JsonResponse
     {
-        // todo validation
+        $errors = $validator->validate($attendee, null, ['attend']);
+        if (count($errors)) {
+            return $this->json([
+                'success' => false,
+                'errors' => (string) $errors,
+            ]);
+        }
 
         $event->addAttendee($attendee);
         $attendeeRepository->save($attendee, true);

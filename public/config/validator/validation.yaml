@@ -1,0 +1,30 @@
+App\Entity\Attendee:
+  properties:
+    firstname:
+      - NotBlank:
+          groups: [attend]
+    lastname:
+      - NotBlank:
+          groups: [attend]
+    code:
+      - NotBlank:
+          groups: [attend]
+      - Regex:
+          pattern: "/^\\d+$/"
+          message: "The {{ label }} must match pattern {{ pattern }}"
+          groups: [attend]
+    isRemote:
+      - Choice:
+          choices: [true, false]
+          groups: [attend]
+    seatRow:
+      - Range:
+          min: 1
+          groups: [attend]
+    seatColumn:
+      - Range:
+          min: 1
+          groups: [attend]
+    token:
+      - NotBLank:
+          groups: [attend]
