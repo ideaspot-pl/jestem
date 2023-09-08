@@ -1,0 +1,12 @@
+POST http://localhost:8000/api/v1/event/1/attend
+Content-Type: application/json
+
+{
+  "token": "abc123",
+  "firstname": "Jon",
+  "lastname": "Snow",
+  "code": "3346",
+  "is_remote": false,
+  "seat_row": 1,
+  "seat_column": 2
+}
