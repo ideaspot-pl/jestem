@@ -48,11 +48,12 @@ export default function MarkAttendance(): ReactElement {
         refreshInterval: 5000,
     });
 
-    const formik = useFormik({
+    const formik= useFormik({
         initialValues: values,
         enableReinitialize: true,
         validate,
         onSubmit: values => {
+            alert('submit');
             if (!data) {
                 return;
             }
@@ -88,11 +89,11 @@ export default function MarkAttendance(): ReactElement {
                     <div className="container-fluid">
                         <span className="navbar-brand mb-0 h1">{data.event.label}</span>
                         <span className="navbar-text">{data.room.label}: {data.event.start}</span>
-                        <button className="btn btn-outline-secondary" type="button" form="attendance-form">Save</button>
+                        <button className="btn btn-outline-secondary" type="submit" form="attendanceForm">Save</button>
                     </div>
                 </nav>
 
-                <form onSubmit={formik.handleSubmit} className="mt-3" id="attendance-form">
+                <form onSubmit={formik.handleSubmit} className="mt-3" id="attendanceForm">
                     <div className="row">
                         <div className="col-md-6">
                             <div className="row">
