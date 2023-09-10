@@ -26,6 +26,7 @@ class PublicApiController extends AbstractController
 
         $json = [
             'event' => [
+                'id' => $event->getId(),
                 'code' => $event->getCode(),
                 'label' => $event->getLabel(),
                 'start' => $event->getStartAt()->format('Y-m-d H:i:s'),

@@ -1,3 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400;1,700&display=swap');
+
+.accordion {
+    --bs-accordion-active-bg: white;
+    --bs-accordion-active-color: black;
+}
+
 body {
-    background-color: lightgray;
+    font-family: 'Poppins', sans-serif;
+}
+
+.room-seat-selector {
+    margin: 5px auto;
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    gap: 4px;
+    @media (min-width: 992px) {
+        gap: 8px;
+    };
+
+    .seat {
+        display: block;
+        padding: 3px;
+        width: 100%;
+        @media (min-width: 992px) {
+            padding: 7px 11px;
+        };
+        border-radius: 3px;
+        box-shadow: 0 2px 4px 0 rgba(0,0,0,.11), 0 2px 4px 0 rgba(0,0,0,.14);
+        cursor: pointer;
+        user-select: none;
+
+        &.blocked {
+            visibility: hidden;
+            cursor: default;
+        }
+
+        &.taken {
+            background: rgba(138,138,138,.418);
+        }
+
+        &.selected {
+            color: #fff;
+            background: #35d406;
+        }
+    }
 }
