@@ -1,0 +1,6 @@
+security:
+  providers:
+    users_in_memory:
+      memory:
+        users:
+          admin: { password: "$2y$13$Vwh1WIYMMIERhfjq14rnxOB38Qev.NFYUDFww/zLPzynOdP99hAnS", roles: [ "ROLE_ADMIN" ] }
