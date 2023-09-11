@@ -55,7 +55,7 @@ class PublicApiController extends AbstractController
         return $this->json($json);
     }
 
-    #[Route('/event/{id}/attend', name: 'event_attend')]
+    #[Route('/event/{id}/attend', name: 'event_attend', methods: ['POST'])]
     function postEventAttend(
         #[MapRequestPayload] Attendee $attendee,
         Event $event,
@@ -71,8 +71,25 @@ class PublicApiController extends AbstractController
             ]);
         }
 
-        $event->addAttendee($attendee);
-        $attendeeRepository->save($attendee, true);
+        $existingAttendee = $attendeeRepository->findOneBy([
+            'event' => $event,
+            'token' => $attendee->getToken(),
+        ]);
+
+        if ($existingAttendee) {
+            $existingAttendee
+                ->setFirstname($attendee->getFirstname())
+                ->setLastname($attendee->getLastname())
+                ->setCode($attendee->getCode())
+                ->setIsRemote($attendee->isIsRemote())
+                ->setSeatRow($attendee->getSeatRow())
+                ->setSeatColumn($attendee->getSeatColumn())
+            ;
+            $attendeeRepository->save($existingAttendee, true);
+        } else {
+            $event->addAttendee($attendee);
+            $attendeeRepository->save($attendee, true);
+        }
 
         return $this->json([
             'success' => true,

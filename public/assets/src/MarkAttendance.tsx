@@ -53,14 +53,26 @@ export default function MarkAttendance(): ReactElement {
         enableReinitialize: true,
         validate,
         onSubmit: values => {
-            alert('submit');
             if (!data) {
                 return;
             }
-            const submitValues = {...values, selected};
+            const submitValues = {
+                ...values,
+                seat_row: selected ? selected[0] : null,
+                seat_column: selected ? selected[1] : null,
+            };
             const key = `event-form-${data.event.id}`;
             localStorage.setItem(key, JSON.stringify(submitValues));
-            alert(JSON.stringify(submitValues, null, 2));
+            fetch(`/api/v1/event/${data.event.id}/attend`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(submitValues),
+            });
+            mutate();
+            setValues(values);
+            setSelected(selected);
         },
     });
 
@@ -71,7 +83,7 @@ export default function MarkAttendance(): ReactElement {
         const key = `event-form-${data.event.id}`;
         const values = JSON.parse(localStorage.getItem(key)!) || initialValues;
         setValues(values);
-        setSelected(values.selected || null);
+        setSelected(values.seat_row && values.seat_column ? [values.seat_row, values.seat_column] : null);
     }, [data]);
 
     if (error) {
