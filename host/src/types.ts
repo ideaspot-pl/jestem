@@ -24,10 +24,12 @@ type SeatDTO = [number, number];
 
 type HostEventAttendeesDTO = {
     remote: AttendeeDTO[],
-    local: {
-        [key: string]: {
-            [key: string]: AttendeeDTO,
-        }
+    local: LocalAttendeesDTO,
+}
+
+type LocalAttendeesDTO = {
+    [key: string]: {
+        [key: string]: AttendeeDTO[],
     }
 }
 
