@@ -68,19 +68,24 @@ export function SeatDisplay({room, seat, attendees}: {
 
     return (
         <div className={classes.join(' ')}>
-            { seatAttendees.map((attendee: AttendeeDTO) => {
-                const src = `/photos/${attendee.code.trim()}.jpg`;
-                return (
-                    <div key={attendee.id} className={styles.attendee}>
-                        <ImageWithFallback src={src} alt={`${attendee.code}`} width={104} height={138} />
-                        <div className={styles.info}>
-                            <div className={styles.firstname}>{attendee.firstname}</div>
-                            <div className={styles.lastname}>{attendee.lastname}</div>
-                            <div className={styles.code}>{attendee.code}</div>
-                        </div>
-                    </div>
-                );
-            })}
+            { seatAttendees.map((attendee: AttendeeDTO) => <AttendeeDisplay attendee={attendee} key={attendee.id} />)}
+        </div>
+    );
+}
+
+export function AttendeeDisplay({attendee}: {
+    attendee: AttendeeDTO
+}): ReactElement {
+    const src = `/photos/${attendee.code.trim()}.jpg`;
+
+    return (
+        <div key={attendee.id} className={styles.attendee}>
+            <ImageWithFallback src={src} alt={`${attendee.code}`} width={104} height={138} />
+            <div className={styles.info}>
+                <div className={styles.firstname}>{attendee.firstname}</div>
+                <div className={styles.lastname}>{attendee.lastname}</div>
+                <div className={styles.code}>{attendee.code}</div>
+            </div>
         </div>
     );
 }

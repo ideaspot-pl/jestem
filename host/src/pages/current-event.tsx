@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import Link from "next/link";
 import useHostCurrentEvent from "@/hooks/useHostCurrentEvent";
-import RoomDisplay from "@/components/RoomDisplay";
+import RoomDisplay, {AttendeeDisplay} from "@/components/RoomDisplay";
 
 
 export default function CurrentEvent() {
@@ -30,8 +30,15 @@ export default function CurrentEvent() {
 
             <main className="container-fluid">
                 <div className="row">
-                    <div className="col">
+                    <div className="col text-center">
                         <RoomDisplay room={eventInfo.room} attendees={eventInfo.attendees} />
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col d-flex">
+                        {eventInfo.attendees.remote.map(attendee => (
+                            <AttendeeDisplay attendee={attendee} key={attendee.id} />
+                        ))}
                     </div>
                 </div>
             </main>

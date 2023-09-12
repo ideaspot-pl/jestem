@@ -1,5 +1,5 @@
 .roomDisplay {
-  display: grid;
+  display: inline-grid;
   align-items: center;
   justify-items: center;
   gap: 4px;
@@ -9,39 +9,40 @@
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.11), 0 2px 4px 0 rgba(0, 0, 0, 0.14);
   border-radius: 6px;
   width: 100%;
+  max-width: 120px;
   height: 100%;
 
   &.blocked {
     visibility: hidden;
   }
+}
 
-  .attendee {
-    display: flex;
-    flex-direction: column;
+.attendee {
+  display: flex;
+  flex-direction: column;
 
-    img {
-      width: 100%;
-      object-fit: cover;
+  img {
+    width: 100%;
+    object-fit: cover;
+  }
+
+  .info {
+    background-color: rgba(255, 255, 255, 0.5);
+
+    div {
+      text-align: center;
     }
 
-    .info {
-      background-color: rgba(255, 255, 255, 0.5);
+    .firstname {
+      font-size: 1em;
+    }
 
-      div {
-        text-align: center;
-      }
+    .lastname {
+      font-size: 0.7em;
+    }
 
-      .firstname {
-        font-size: 1em;
-      }
-
-      .lastname {
-        font-size: 0.7em;
-      }
-
-      .code {
-        font-size: 0.7em;
-      }
+    .code {
+      font-size: 0.7em;
     }
   }
 }
