@@ -1,5 +1,5 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
-    <div id="mark-attendance-root"></div>
+    <div id="mark-attendance-root" {% if event and event.code %}data-event-code="{{ event.code }}"{% endif %}></div>
 {% endblock %}

@@ -40,11 +40,15 @@ const validate = (values: FormValues) => {
     return errors;
 }
 
-export default function MarkAttendance(): ReactElement {
+export default function MarkAttendance({eventCode}: {
+    eventCode?: string,
+}): ReactElement {
     const [selected, setSelected] = useState<SeatDTO|null>(null);
     const [values, setValues] = useState<FormValues>(initialValues);
 
-    const {data, isLoading, error, mutate} = useSWR<EventInfoDTO>('/api/v1/event-info', fetcher, {
+    const url = eventCode ? `/api/v1/event-info/${eventCode}` : '/api/v1/event-info';
+    console.log(url);
+    const {data, isLoading, error, mutate} = useSWR<EventInfoDTO>(url, fetcher, {
         refreshInterval: 5000,
     });
 

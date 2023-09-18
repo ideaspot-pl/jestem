@@ -8,6 +8,7 @@ use App\Repository\AttendeeRepository;
 use App\Repository\EventRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,14 +17,25 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 #[Route('/api/v1', name: 'app_public_api_')]
 class PublicApiController extends AbstractController
 {
-    #[Route('/event-info', name: 'eventinfo')]
-    public function getEventInfo(
+    #[Route('/event-info', name: 'eventinfo_active')]
+    public function getEventInfoActive(
         EventRepository $eventRepository,
-    ): JsonResponse
+    ): Response
     {
         $event = $eventRepository->findOneBy(['isActive' => true]);
 
+        if (!$event) {
+            return $this->json(['error' => 'No active event found'], Response::HTTP_NOT_FOUND);
+        }
 
+        return $this->redirectToRoute('app_public_api_eventinfo', ['code' => $event->getCode()]);
+    }
+
+    #[Route('/event-info/{code}', name: 'eventinfo')]
+    public function getEventInfo(
+        Event $event,
+    ): JsonResponse
+    {
         $json = [
             'event' => [
                 'id' => $event->getId(),
