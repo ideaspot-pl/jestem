@@ -1,0 +1,10 @@
+{
+  "mark_attendance": {
+    "firstname": "Firstname",
+    "lastname": "Lastname",
+    "code": "Code",
+    "remote": "Remote?",
+    "seat": "Seat",
+    "save": "Save"
+  }
+}

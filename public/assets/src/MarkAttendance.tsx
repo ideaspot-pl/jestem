@@ -4,6 +4,7 @@ import "./types";
 import RoomSeatSelector from "./RoomSeatSelector";
 import {useFormik} from "formik";
 import {v4 as uuidv4} from 'uuid';
+import {useTranslation} from "react-i18next";
 
 const fetcher = (url: string) => fetch(url).then(res => res.json());
 
@@ -43,11 +44,12 @@ const validate = (values: FormValues) => {
 export default function MarkAttendance({eventCode}: {
     eventCode?: string,
 }): ReactElement {
+    const {t} = useTranslation();
     const [selected, setSelected] = useState<SeatDTO|null>(null);
     const [values, setValues] = useState<FormValues>(initialValues);
+    const [isSaving, setIsSaving] = useState<boolean>(false);
 
     const url = eventCode ? `/api/v1/event-info/${eventCode}` : '/api/v1/event-info';
-    console.log(url);
     const {data, isLoading, error, mutate} = useSWR<EventInfoDTO>(url, fetcher, {
         refreshInterval: 5000,
     });
@@ -60,6 +62,7 @@ export default function MarkAttendance({eventCode}: {
             if (!data) {
                 return;
             }
+            setIsSaving(true);
             const submitValues = {
                 ...values,
                 seat_row: selected ? selected[0] : null,
@@ -73,6 +76,8 @@ export default function MarkAttendance({eventCode}: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(submitValues),
+            }).finally(() => {
+                setIsSaving(false);
             });
             mutate();
             setValues(values);
@@ -95,7 +100,13 @@ export default function MarkAttendance({eventCode}: {
     }
 
     if (isLoading || !data) {
-        return <div>Loading...</div>;
+        return (
+            <div className="text-center pt-5">
+                <div className="spinner-border" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        );
     }
 
     return (
@@ -105,7 +116,19 @@ export default function MarkAttendance({eventCode}: {
                     <div className="container-fluid">
                         <span className="navbar-brand mb-0 h1">{data.event.label}</span>
                         <span className="navbar-text">{data.room.label}: {data.event.start}</span>
-                        <button className="btn btn-outline-secondary" type="submit" form="attendanceForm">Save</button>
+                        <button className={`btn btn-outline-secondary`}
+                                disabled={isSaving}
+                                type="submit"
+                                form="attendanceForm"
+                        >
+                            {t("mark_attendance.save")}
+                            {isSaving ? (
+                                <>
+                                    <span className="ms-3 spinner-border spinner-border-sm" aria-hidden="true"></span>
+                                    <span className="visually-hidden" role="status">Saving...</span>
+                                </>
+                            ) : null}
+                        </button>
                     </div>
                 </nav>
 
@@ -115,27 +138,27 @@ export default function MarkAttendance({eventCode}: {
                             <div className="row">
                                 <div className="col-12">
                                     <div className="mb-3">
-                                        <label htmlFor="firstname">Firstname</label>
+                                        <label htmlFor="firstname">{t("mark_attendance.firstname")}</label>
                                         <input
                                             onChange={formik.handleChange} value={formik.values.firstname} onBlur={formik.handleBlur}
                                             type="text"
                                             className={`form-control ${formik.touched.firstname && formik.errors.firstname ? 'is-invalid' : ''}`}
-                                            id="firstname" name="firstname" placeholder="Firstname" />
+                                            id="firstname" name="firstname" placeholder={t("mark_attendance.firstname")} />
                                     </div>
                                 </div>
                                 <div className="col-12">
                                     <div className="mb-3">
-                                        <label htmlFor="lastname">Lastname</label>
+                                        <label htmlFor="lastname">{t("mark_attendance.lastname")}</label>
                                         <input
                                             onChange={formik.handleChange} value={formik.values.lastname} onBlur={formik.handleBlur}
                                             type="text"
                                             className={`form-control ${formik.touched.lastname && formik.errors.lastname ? 'is-invalid' : ''}`}
-                                            id="lastname" name="lastname" placeholder="Lastname" />
+                                            id="lastname" name="lastname" placeholder={t("mark_attendance.lastname")} />
                                     </div>
                                 </div>
                                 <div className="col-12">
                                     <div className="mb-3">
-                                        <label htmlFor="code">Code</label>
+                                        <label htmlFor="code">{t("mark_attendance.code")}</label>
                                         <input
                                             onChange={formik.handleChange} value={formik.values.code} onBlur={formik.handleBlur}
                                             type="text"
@@ -148,7 +171,7 @@ export default function MarkAttendance({eventCode}: {
                                 </div>
                                 <div className="col-12">
                                     <div className="form-check form-switch">
-                                        <label className="form-check-label" htmlFor="is_remote">Remote?</label>
+                                        <label className="form-check-label" htmlFor="is_remote">{t("mark_attendance.remote")}</label>
                                         <input
                                             onChange={formik.handleChange} onBlur={formik.handleBlur}
                                             className="form-check-input"
@@ -164,7 +187,7 @@ export default function MarkAttendance({eventCode}: {
 
                         <div className="col-md-6 text-center">
                             <div className="text-start mb-3">
-                                <label>Seat</label>
+                                <label>{t("mark_attendance.seat")}</label>
                             </div>
                             <RoomSeatSelector
                                 room={data.room}

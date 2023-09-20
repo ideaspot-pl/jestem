@@ -1,0 +1,10 @@
+{
+  "mark_attendance": {
+    "firstname": "Imię",
+    "lastname": "Nazwisko",
+    "code": "Numer albumu",
+    "remote": "Zdalnie?",
+    "seat": "Miejsce",
+    "save": "Zapisz"
+  }
+}

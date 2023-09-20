@@ -9,6 +9,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: EventRepository::class)]
+#[ORM\UniqueConstraint(name: "event_code", columns: ["code"])]
 class Event
 {
     #[ORM\Id]
