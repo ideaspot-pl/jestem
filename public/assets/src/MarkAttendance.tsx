@@ -6,7 +6,11 @@ import {useFormik} from "formik";
 import {v4 as uuidv4} from 'uuid';
 import {useTranslation} from "react-i18next";
 
-const fetcher = (url: string) => fetch(url).then(res => res.json());
+const fetcher = (url: string) => fetch(url)
+    .then(res => res.json())
+    .catch(() => {
+        throw new Error("Failed to fetch")
+    });
 
 interface FormValues {
     token: string,
@@ -95,11 +99,12 @@ export default function MarkAttendance({eventCode}: {
         setSelected(values.seat_row && values.seat_column ? [values.seat_row, values.seat_column] : null);
     }, [data]);
 
+
     if (error) {
         return <div>Error: {error}</div>;
     }
 
-    if (isLoading || !data) {
+    if (isLoading || !data || !data.event || !data.room) {
         return (
             <div className="text-center pt-5">
                 <div className="spinner-border" role="status">
